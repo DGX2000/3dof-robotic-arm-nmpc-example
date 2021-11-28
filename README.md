@@ -3,9 +3,11 @@ Example for controlling a 3-DOF robotic arm with an NMPC utilizing IPOPT for opt
 
 ## Roadmap
 ### Development
-- [ ] Set up SFML project
-- [ ] Set up OpenGL
-- [ ] Set up controls for moving
+- [X] Set up SFML project
+- [X] Set up OpenGL
+- [ ] Meshes for cylinders, spheres
+- [ ] Render robotic arm
+- [ ] Set up controls for moving camera (move along a sphere around robotic arm)
 - [ ] Set up controls for moving the target point
 
 ### Control engineering
@@ -15,5 +17,4 @@ Example for controlling a 3-DOF robotic arm with an NMPC utilizing IPOPT for opt
 - [ ] Integrator (symplectic?)
 - [ ] Integrate IPOPT for optimization
 - [ ] Integrate eigen for calculation (is it needed?)
-- [ ] Formulate NMPC
-- [ ] Parallelization?
+- [ ] Formulate and implement NMPC
