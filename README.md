@@ -5,9 +5,10 @@ Example for controlling a 3-DOF robotic arm with an NMPC utilizing IPOPT for opt
 ### Development
 - [X] Set up SFML project
 - [X] Set up OpenGL
+- [X] Set up scene graph
+- [ ] Set up controls for moving camera (move along a sphere around robotic arm)
 - [ ] Meshes for cylinders, spheres
 - [ ] Render robotic arm
-- [ ] Set up controls for moving camera (move along a sphere around robotic arm)
 - [ ] Set up controls for moving the target point
 
 ### Control engineering

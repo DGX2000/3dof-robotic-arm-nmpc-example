@@ -14,6 +14,8 @@
 #include <SFML/Graphics/Shader.hpp>
 
 #include "mesh.h"
+#include "transformnode.h"
+#include "meshnode.h"
 
 int main()
 {
@@ -33,16 +35,17 @@ int main()
 
     glewInit();
 
-    auto cube = Mesh::createCube();
 
-    // SFML Shader
+
+    // Mesh and Shader
     sf::Shader sfShader;
     sfShader.loadFromFile("vertex_shader.glslv", "fragment_shader.glslf");
+    auto cube = Mesh::createCube();
 
-    glm::mat4 trans = glm::mat4(1.0F);
+    TransformNode sceneRoot;
+    MeshNode testCube(&cube, &sfShader);
+    sceneRoot.addNode(&testCube);
 
-    trans = glm::translate(trans, glm::vec3(0.0, 0.0, 0.0));
-    trans = glm::rotate(trans, glm::radians(45.0F), glm::vec3(1.0, 1.0, 1.0));
 
     glm::vec3 cameraUp = glm::vec3(0.0, 1.0, 0.0);
     glm::vec3 cameraTarget = glm::vec3();
@@ -66,7 +69,11 @@ int main()
             {
                 screenWidth = event.size.width;
                 screenHeight = event.size.height;
-                glViewport(0, 0, event.size.width, event.size.height);
+
+                glViewport(0, 0, screenWidth, screenHeight);
+                perspective = glm::perspective(glm::radians(75.0F),
+                                               static_cast<float>(screenWidth)/static_cast<float>(screenHeight),
+                                               0.1F, 100.0F);
             }
             else if(event.type == sf::Event::KeyPressed)
             {
@@ -81,12 +88,10 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         auto cameraPosition = glm::vec3(3.0*glm::cos(cameraTheta), 0.0, 3.0*glm::sin(cameraTheta));
-        auto transform = perspective * glm::lookAt(cameraPosition, cameraTarget, cameraUp) * trans;
+        auto transform = perspective * glm::lookAt(cameraPosition, cameraTarget, cameraUp);
 
-        sfShader.setUniform("transform", sf::Glsl::Mat4(&transform[0][0]));
-        sf::Shader::bind(&sfShader);
-
-        cube.draw(sfShader);
+        sceneRoot.rotate(glm::vec3(0.001F, -0.002F, 0.004F));
+        sceneRoot.traverse(transform);
 
         window.display();
     }
