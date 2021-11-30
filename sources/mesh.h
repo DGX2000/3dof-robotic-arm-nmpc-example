@@ -34,6 +34,12 @@ public:
     // static Mesh createSphere(segments >= 3);
 
 private:
+    // Helper functions:
+    // connectQuad(indices)
+    // connectRingToSingle(vector<indices>, center)
+    // connectRingToRing(vector<indices>, vector<indices>)
+
+private:
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
