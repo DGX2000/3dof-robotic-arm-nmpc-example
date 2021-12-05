@@ -29,9 +29,8 @@ int main()
     glewInit();
     glEnable(GL_DEPTH_TEST);
 
-    // Class for robot arm
     RoboticArm roboticArm;
-    SphereCamera sphereCam(3.0F);
+    SphereCamera sphereCam(glm::vec3(0.0F, 0.5F, 0.0F), 3.0F);
 
     while(window.isOpen())
     {
@@ -58,10 +57,16 @@ int main()
                 switch(event.key.code)
                 {
                 case sf::Keyboard::A:
-                    sphereCam.moveLongitudinal(0.05F);
+                    sphereCam.moveLongitudinal(-0.05F);
                     break;
                 case sf::Keyboard::D:
-                    sphereCam.moveLongitudinal(-0.05F);
+                    sphereCam.moveLongitudinal(0.05F);
+                    break;
+                case sf::Keyboard::W:
+                    sphereCam.moveLatitudinal(-0.05F);
+                    break;
+                case sf::Keyboard::S:
+                    sphereCam.moveLatitudinal(0.05F);
                     break;
                 default:
                     break;

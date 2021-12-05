@@ -6,7 +6,7 @@
 class SphereCamera : public Camera
 {
 public:
-    SphereCamera(float radius);
+    SphereCamera(glm::vec3 center, float radius);
 
     void computeTransformationMatrix() const override;
 
@@ -14,8 +14,10 @@ public:
     void moveLatitudinal(float amount);
 
 private:
+    glm::vec3 center;
+
     float radius;
-    float theta{0.0F};
+    float theta{0.5F*3.1415F};
     float phi{0.0F};
 };
 
