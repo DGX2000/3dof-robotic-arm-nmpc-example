@@ -3,7 +3,7 @@
 #include <SFML/Graphics/Glsl.hpp>
 
 RoboticArm::RoboticArm()
-    : cube(Mesh::createCube())
+    : cube(Mesh::createSphere(16))
 {
     shader.loadFromFile("vertex_shader.glslv", "fragment_shader.glslf");
     shader.setUniform("lightPosition", sf::Glsl::Vec3(5.0F, 5.0F, 5.0F));

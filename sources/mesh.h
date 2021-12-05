@@ -23,15 +23,18 @@ public:
     void draw(sf::Shader* shader);
 
     static Mesh createCube();
-
-    // static Mesh createCylinder(segments >= 3);
-    // static Mesh createSphere(segments >= 3);
+    static Mesh createCylinder(unsigned int segments);
+    static Mesh createSphere(unsigned int segments);
 
 private:
     // Helper functions:
-    // connectQuad(indices)
-    // connectRingToSingle(vector<indices>, center)
-    // connectRingToRing(vector<indices>, vector<indices>)
+    static std::vector<unsigned int> connectQuad(unsigned int start[4]);
+    static std::vector<unsigned int> connectRingToSingle(unsigned int ringStart,
+                                                         unsigned int ringLength,
+                                                         unsigned int center);
+    static std::vector<unsigned int> connectRingToRing(unsigned int upperRingStart,
+                                                       unsigned int lowerRingStart,
+                                                       unsigned int ringLength);
 
 private:
     std::vector<Vertex> vertices;
