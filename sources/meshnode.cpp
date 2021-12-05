@@ -10,10 +10,11 @@ MeshNode::MeshNode(Mesh* mesh, sf::Shader* shader)
 
 }
 
-void MeshNode::draw(const glm::mat4& transformation) const
+void MeshNode::draw(const glm::mat4& worldToCamera, const glm::mat4& modelToWorld) const
 {
-    shader->setUniform("transform", sf::Glsl::Mat4(&transformation[0][0]));
-    mesh->draw(*shader);
+    shader->setUniform("camera", sf::Glsl::Mat4(&worldToCamera[0][0]));
+    shader->setUniform("model", sf::Glsl::Mat4(&modelToWorld[0][0]));
+    mesh->draw(shader);
 }
 
 void MeshNode::transform(glm::mat4& transformation) const

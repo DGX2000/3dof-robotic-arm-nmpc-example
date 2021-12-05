@@ -37,27 +37,26 @@ Mesh::~Mesh()
     glDeleteBuffers(1, &vbo);
 }
 
-void Mesh::draw(const sf::Shader &shader)
+void Mesh::draw(sf::Shader* shader)
 {
-    sf::Shader::bind(&shader);
+    sf::Shader::bind(shader);
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
 Mesh Mesh::createCube()
 {
-    // TODO: Add 135° normals
     std::vector<Vertex> vertices
     {
-        {{0.0F, 0.0F, 0.0F}, {0.0F, 0.0F, 0.0F}},   // 0 front-face bottom-left
-        {{1.0F, 0.0F, 0.0F}, {0.0F, 0.0F, 0.0F}},   // 1 front-face bottom-right
-        {{1.0F, 1.0F, 0.0F}, {0.0F, 0.0F, 0.0F}},   // 2 front-face top-right
-        {{0.0F, 1.0F, 0.0F}, {0.0F, 0.0F, 0.0F}},   // 3 front-face top-left
+        {{-0.5F, -0.5F, 0.5F}, {-1.0F, -1.0F, 1.0F}},   // 0 front-face bottom-left
+        {{0.5F, -0.5F, 0.5F}, {1.0F, -1.0F, 1.0F}},   // 1 front-face bottom-right
+        {{0.5F, 0.5F, 0.5F}, {1.0F, 1.0F, 1.0F}},   // 2 front-face top-right
+        {{-0.5F, 0.5F, 0.5F}, {-1.0F, 1.0F, 1.0F}},   // 3 front-face top-left
 
-        {{0.0F, 0.0F, 1.0F}, {0.0F, 0.0F, 0.0F}},   // 4 back-face bottom-left
-        {{1.0F, 0.0F, 1.0F}, {0.0F, 0.0F, 0.0F}},   // 5 back-face bottom-right
-        {{1.0F, 1.0F, 1.0F}, {0.0F, 0.0F, 0.0F}},   // 6 back-face top-right
-        {{0.0F, 1.0F, 1.0F}, {0.0F, 0.0F, 0.0F}}    // 7 back-face top-left
+        {{-0.5F, -0.5F, -0.5F}, {-1.0F, -1.0F, -1.0F}},   // 4 back-face bottom-left
+        {{0.5F, -0.5F, -0.5F}, {1.0F, -1.0F, -1.0F}},   // 5 back-face bottom-right
+        {{0.5F, 0.5F, -0.5F}, {1.0F, 1.0F, -1.0F}},   // 6 back-face top-right
+        {{-0.5F, 0.5F, -0.5F}, {-1.0F, 1.0F, -1.0F}}    // 7 back-face top-left
     };
 
     std::vector<unsigned int> indices

@@ -1,12 +1,19 @@
 #version 330 core
 
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 normal;
+layout (location = 0) in vec3 positionIn;
+layout (location = 1) in vec3 normalIn;
 
-uniform mat4 transform;
+out vec3 normal;
+out vec3 positionWorld;
+
+uniform mat4 camera;
+uniform mat4 model;
 
 void main()
 {
-  gl_Position = transform * vec4(position, 1.0f);
+  gl_Position = camera * model * vec4(positionIn, 1.0f);
+  
+  normal = normalIn;
+  positionWorld = vec3(model * vec4(positionIn, 1.0f));
 }
 

@@ -17,7 +17,7 @@ public:
     void scale(const glm::vec3& scaling);
 
 protected:
-    virtual void draw(const glm::mat4& transformation) const;
+    virtual void draw(const glm::mat4& camera, const glm::mat4& transformation) const;
     virtual void transform(glm::mat4& transformation) const;
     virtual bool isDrawable() const;
 

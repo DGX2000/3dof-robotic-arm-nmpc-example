@@ -2,11 +2,11 @@
 
 #include <algorithm>
 
-void SceneNode::traverse(glm::mat4 transformation) const
+void SceneNode::traverse(const glm::mat4& camera, glm::mat4 transformation) const
 {
     if(isDrawable())
     {
-        draw(transformation);
+        draw(camera, transformation);
     }
     else
     {
@@ -15,7 +15,7 @@ void SceneNode::traverse(glm::mat4 transformation) const
 
     for(const auto& child : children)
     {
-        child->traverse(transformation);
+        child->traverse(camera, transformation);
     }
 }
 

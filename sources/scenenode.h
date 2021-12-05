@@ -8,7 +8,7 @@
 class SceneNode
 {
 public:
-    void traverse(glm::mat4 transformation) const;
+    void traverse(const glm::mat4& camera, glm::mat4 transformation) const;
 
     void addNode(class SceneNode* node);
     void removeNode(class SceneNode* node);
@@ -16,7 +16,7 @@ public:
 protected:
     SceneNode() = default;
 
-    virtual void draw(const glm::mat4& transformation) const = 0;
+    virtual void draw(const glm::mat4& camera, const glm::mat4& transformation) const = 0;
     virtual void transform(glm::mat4& transformation) const = 0;
     virtual bool isDrawable() const = 0;
 

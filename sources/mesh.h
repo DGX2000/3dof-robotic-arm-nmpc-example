@@ -18,15 +18,9 @@ public:
 
 public:
     Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices);
-
-    // No point to copies, objects of this class are completely static.
-    // Use objects like a flyweight.
-    Mesh(const Mesh& other) = delete;
-    Mesh& operator=(const Mesh& other) = delete;
-
     ~Mesh();
 
-    void draw(const sf::Shader& shader);
+    void draw(sf::Shader* shader);
 
     static Mesh createCube();
 

@@ -20,7 +20,7 @@ void TransformNode::scale(const glm::vec3 &scaling)
     cachedTransformation.reset();
 }
 
-void TransformNode::draw(const glm::mat4 &transformation) const {}
+void TransformNode::draw(const glm::mat4& camera, const glm::mat4 &transformation) const {}
 
 void TransformNode::transform(glm::mat4 &transformation) const
 {
