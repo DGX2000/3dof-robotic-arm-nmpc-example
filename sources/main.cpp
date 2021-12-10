@@ -30,7 +30,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     RoboticArm roboticArm;
-    SphereCamera sphereCam(glm::vec3(0.0F, 0.5F, 0.0F), 3.0F);
+    SphereCamera sphereCam(glm::vec3(0.0F, 1.0F, 0.0F), 3.0F);
 
     while(window.isOpen())
     {
