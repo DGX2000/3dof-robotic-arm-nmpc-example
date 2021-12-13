@@ -74,7 +74,7 @@ int main()
             }
         }
 
-        glClearColor(0.2F, 0.3F, 0.3F, 1.0F);
+        glClearColor(0.6F, 0.8F, 0.9F, 1.0F);
         glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_DEPTH_BUFFER_BIT);
 

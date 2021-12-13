@@ -19,7 +19,9 @@ public:
 private:
     Mesh jointMesh;
     Mesh linkMesh;
-    sf::Shader shader;
+
+    sf::Shader jointShader;
+    sf::Shader linkShader;
 
     std::unique_ptr<TransformNode> joint1Transform;
     std::unique_ptr<TransformNode> joint2Transform;
@@ -29,12 +31,13 @@ private:
 
     std::unique_ptr<TransformNode> link1Scale;
     std::unique_ptr<TransformNode> link2Scale;
+    std::unique_ptr<TransformNode> crossbar;
     std::unique_ptr<TransformNode> link3Scale;
 
-    std::unique_ptr<TransformNode> joint2Scale;
-    std::unique_ptr<TransformNode> joint3Scale;
+    std::unique_ptr<TransformNode> joint2VisualRotation;
+    std::unique_ptr<TransformNode> joint3VisualRotation;
 
-    std::unique_ptr<MeshNode> cylinder;
+    std::unique_ptr<MeshNode> link;
     std::unique_ptr<MeshNode> joint;
 };
 

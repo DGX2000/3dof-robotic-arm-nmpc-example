@@ -3,12 +3,17 @@
 #include <SFML/Graphics/Glsl.hpp>
 
 RoboticArm::RoboticArm()
-    : jointMesh(Mesh::createSphere(16)), linkMesh(Mesh::createCylinder(16))
+    : jointMesh(Mesh::createCylinder(16)), linkMesh(Mesh::createCylinder(16))
 {
-    shader.loadFromFile("vertex_shader.glslv", "fragment_shader.glslf");
-    shader.setUniform("lightPosition", sf::Glsl::Vec3(5.0F, 5.0F, -5.0F));
+    linkShader.loadFromFile("vertex_shader.glslv", "fragment_shader.glslf");
+    linkShader.setUniform("color", sf::Glsl::Vec4(0.8F, 0.6F, 0.1F, 1.0F));
+    linkShader.setUniform("lightPosition", sf::Glsl::Vec3(-5.0F, 5.0F, -5.0F));
+    linkShader.setUniform("diffuseStrength", 0.3F);
 
-    // TODO: Different shader for the spheres as joints (gray)
+    jointShader.loadFromFile("vertex_shader.glslv", "fragment_shader.glslf");
+    jointShader.setUniform("lightPosition", sf::Glsl::Vec3(-5.0F, 5.0F, -5.0F));
+    jointShader.setUniform("color", sf::Glsl::Vec4(0.25F, 0.25F, 0.25F, 1.0F));
+    jointShader.setUniform("diffuseStrength", 0.1F);
 
     joint1Transform = std::make_unique<TransformNode>();
     joint2Transform = std::make_unique<TransformNode>();
@@ -17,14 +22,14 @@ RoboticArm::RoboticArm()
     baseScale = std::make_unique<TransformNode>();
     link1Scale = std::make_unique<TransformNode>();
     link2Scale = std::make_unique<TransformNode>();
+    crossbar = std::make_unique<TransformNode>();
     link3Scale = std::make_unique<TransformNode>();
 
-    joint2Scale = std::make_unique<TransformNode>();
-    joint3Scale = std::make_unique<TransformNode>();
+    joint2VisualRotation = std::make_unique<TransformNode>();
+    joint3VisualRotation = std::make_unique<TransformNode>();
 
-    cylinder = std::make_unique<MeshNode>(&linkMesh, &shader);
-    joint = std::make_unique<MeshNode>(&jointMesh, &shader);
-
+    link = std::make_unique<MeshNode>(&linkMesh, &linkShader);
+    joint = std::make_unique<MeshNode>(&jointMesh, &jointShader);
 
 
     // setting up the tree structure for the transformations
@@ -33,21 +38,23 @@ RoboticArm::RoboticArm()
     joint1Transform->addNode(joint2Transform.get());
 
     joint2Transform->addNode(link2Scale.get());
-    joint2Transform->addNode(joint2Scale.get());
+    joint2Transform->addNode(joint2VisualRotation.get());
     joint2Transform->addNode(joint3Transform.get());
+    joint2Transform->addNode(crossbar.get());
 
     joint3Transform->addNode(link3Scale.get());
-    joint3Transform->addNode(joint3Scale.get());
+    joint3Transform->addNode(joint3VisualRotation.get());
 
     // add in meshes at appropriate locations
-    baseScale->addNode(cylinder.get());
-    link1Scale->addNode(cylinder.get());
+    baseScale->addNode(joint.get());
+    link1Scale->addNode(link.get());
 
-    joint2Scale->addNode(joint.get());
-    link2Scale->addNode(cylinder.get());
+    joint2VisualRotation->addNode(joint.get());
+    link2Scale->addNode(link.get());
+    crossbar->addNode(link.get());
 
-    joint3Scale->addNode(joint.get());
-    link3Scale->addNode(cylinder.get());
+    joint3VisualRotation->addNode(joint.get());
+    link3Scale->addNode(link.get());
 
 
 
@@ -56,29 +63,35 @@ RoboticArm::RoboticArm()
     // TODO: make this parametric, add missing sphere/cylinder at joint 3
     auto link1HalfLength = 1.25F;
 
-    baseScale->scale(glm::vec3(1.0F, 0.5F, 1.0F));
+    baseScale->setScale(glm::vec3(1.0F, 0.5F, 1.0F));
 
-    link1Scale->scale(glm::vec3(0.25F, 2.0F, 0.25F));
-    link1Scale->move(glm::vec3(0.0F, 0.25F, 0.0F));
-    link1Scale->rotate(glm::vec3(0.0F, 0.0F, glm::radians(90.0F)));
+    link1Scale->setScale(glm::vec3(0.25F, 2.0F, 0.25F));
+    link1Scale->setPosition(glm::vec3(0.0F, 0.25F, 0.0F));
+    link1Scale->setRotation(glm::vec3(0.0F, 0.0F, glm::radians(90.0F)));
 
-    joint2Transform->move(glm::vec3(link1HalfLength, 0.25F, 0.0F));
-    joint2Scale->scale(glm::vec3(0.35F, 0.35F, 0.35F));
+    joint2Transform->setPosition(glm::vec3(link1HalfLength, 0.25F, 0.0F));
+    joint2VisualRotation->setScale(glm::vec3(0.3F, 0.5F, 0.3F));
+    joint2VisualRotation->setRotation(glm::vec3(glm::radians(90.0F), 0.0F, 0.0F));
 
-    link2Scale->scale(glm::vec3(0.25F, 2.0F, 0.25F));
-    link2Scale->move(glm::vec3(0.0F, 0.0F, -1.0F));
-    link2Scale->rotate(glm::vec3(glm::radians(90.0F), 0.0F, 0.0F));
+    link2Scale->setScale(glm::vec3(0.2F, 2.0F, 0.2F));
+    link2Scale->setPosition(glm::vec3(0.0F, 0.0F, -1.0F));
+    link2Scale->setRotation(glm::vec3(glm::radians(90.0F), 0.0F, 0.0F));
 
-    joint3Transform->move(glm::vec3(-0.75F, 0.0F, -2.0F));
-    joint3Scale->scale(glm::vec3(0.35F, 0.35F, 0.35F));
+    crossbar->setScale(glm::vec3(0.15F, 0.8F, 0.15F));
+    crossbar->setPosition(glm::vec3(-0.15F, 0.0F, -2.0F));
+    crossbar->setRotation(glm::vec3(0.0F, 0.0F, glm::radians(90.0F)));
 
-    link3Scale->scale(glm::vec3(0.25F, 2.0F, 0.25F));
-    link3Scale->rotate(glm::vec3(glm::radians(90.0F), 0.0F, 0.0F));
-    link3Scale->move(glm::vec3(0.0F, 0.0F, -1.0F));
+    joint3Transform->setPosition(glm::vec3(-0.75F, 0.0F, -2.0F));
+    joint3VisualRotation->setScale(glm::vec3(0.3F, 0.3F, 0.3F));
+    joint3VisualRotation->setRotation(glm::vec3(glm::radians(90.0F), 0.0F, 0.0F));
+
+    link3Scale->setScale(glm::vec3(0.15F, 2.0F, 0.15F));
+    link3Scale->setRotation(glm::vec3(glm::radians(90.0F), 0.0F, 0.0F));
+    link3Scale->setPosition(glm::vec3(0.0F, 0.0F, -1.0F));
 
 
 
-    joint2Transform->rotate(glm::vec3(glm::radians(45.0F), 0.0F, 0.0F));
+    joint2Transform->setRotation(glm::vec3(glm::radians(45.0F), 0.0F, 0.0F));
     // TODO: Add the rotations to its own function, where you can set the rotation dynamically
 //    joint2->move(glm::vec3(1.5F, 0.0F, 0.0F));
 //    joint2->rotate(glm::vec3(glm::radians(45.0F), 0.0F, 0.0F));

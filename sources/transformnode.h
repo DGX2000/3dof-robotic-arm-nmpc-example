@@ -12,9 +12,9 @@ class TransformNode : public SceneNode
 public:
     TransformNode() = default;
 
-    void move(const glm::vec3& translation);
-    void rotate(const glm::vec3& rotation);
-    void scale(const glm::vec3& scaling);
+    void setPosition(const glm::vec3& translation);
+    void setRotation(const glm::vec3& rotation);
+    void setScale(const glm::vec3& scaling);
 
 protected:
     virtual void draw(const glm::mat4& camera, const glm::mat4& transformation) const;

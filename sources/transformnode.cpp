@@ -2,19 +2,19 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-void TransformNode::move(const glm::vec3 &translation)
+void TransformNode::setPosition(const glm::vec3 &translation)
 {
-    this->translation += translation;
+    this->translation = translation;
     cachedTransformation.reset();
 }
 
-void TransformNode::rotate(const glm::vec3 &rotation)
+void TransformNode::setRotation(const glm::vec3 &rotation)
 {
-    this->rotation += rotation;
+    this->rotation = rotation;
     cachedTransformation.reset();
 }
 
-void TransformNode::scale(const glm::vec3 &scaling)
+void TransformNode::setScale(const glm::vec3 &scaling)
 {
     this->scaling = scaling;
     cachedTransformation.reset();
