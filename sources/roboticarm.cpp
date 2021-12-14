@@ -99,7 +99,7 @@ RoboticArm::RoboticArm()
 //    joint3->rotate(glm::vec3(glm::radians(45.0F), 0.0F, 0.0F));
 }
 
-const SceneNode *RoboticArm::getRootNode() const
+SceneNode *RoboticArm::getRootNode() const
 {
     return joint1Transform.get();
 }

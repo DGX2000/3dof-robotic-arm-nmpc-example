@@ -14,7 +14,7 @@ class RoboticArm
 public:
     RoboticArm();
 
-    const SceneNode* getRootNode() const;
+    SceneNode* getRootNode() const;
 
 private:
     Mesh jointMesh;

@@ -7,6 +7,7 @@
 #include "transformnode.h"
 #include "meshnode.h"
 #include "roboticarm.h"
+#include "target.h"
 #include "camera.h"
 #include "spherecamera.h"
 
@@ -30,6 +31,14 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     RoboticArm roboticArm;
+    Target target;
+
+    TransformNode root;
+    root.addNode(roboticArm.getRootNode());
+    root.addNode(target.getRootNode());
+
+    target.setValid();
+
     SphereCamera sphereCam(glm::vec3(0.0F, 1.0F, 0.0F), 3.0F);
 
     while(window.isOpen())
@@ -68,6 +77,18 @@ int main()
                 case sf::Keyboard::S:
                     sphereCam.moveLatitudinal(0.05F);
                     break;
+                case sf::Keyboard::Left:
+                    target.move(glm::vec3(-0.05F, 0.0F, 0.0F));
+                    break;
+                case sf::Keyboard::Right:
+                    target.move(glm::vec3(0.05F, 0.0F, 0.0F));
+                    break;
+                case sf::Keyboard::Up:
+                    target.move(glm::vec3(0.0F, 0.0F, -0.05F));
+                    break;
+                case sf::Keyboard::Down:
+                    target.move(glm::vec3(0.0F, 0.0F, 0.05F));
+                    break;
                 default:
                     break;
                 }
@@ -78,7 +99,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         glClear(GL_DEPTH_BUFFER_BIT);
 
-        sphereCam.capture(roboticArm.getRootNode());
+        sphereCam.capture(&root);
 
         window.display();
     }
